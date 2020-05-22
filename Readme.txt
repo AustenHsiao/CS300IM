@@ -16,5 +16,7 @@ the domain. Since I'm not the owner of pdx.edu, I'm at a standstill trying to us
 firebase functionality, so I've decided to make a local chat app. 
 Authentication added 05/20/2020
 Chat display added 05/22/2020
+
+It's very barebones
 End 05/22/2020
 
