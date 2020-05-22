@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="google-site-verification" content="Opw_-q9gQ2C-HVRKILLK23UcULH_QEHevsdKmieNAck" />
+    <meta charset="utf-8" />
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    <link rel="stylesheet" href="cs300im.css">
+</head>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+
+
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-auth.js"></script>
+
+<script>
+    
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyApbyA0OmPBFDCmbc6kAeK771TTAYUFujs",
+        authDomain: "cs300im.firebaseapp.com",
+        databaseURL: "https://cs300im.firebaseio.com",
+        projectId: "cs300im",
+        storageBucket: "cs300im.appspot.com",
+        messagingSenderId: "248449550768",
+        appId: "1:248449550768:web:a399af4ca23bafa0a1ee75"
+    };
+    // Initialize Firebase and setup db
+    firebase.initializeApp(firebaseConfig);
+    let user = firebase.auth().currentUser;
+    if(user){
+        firebase.auth().signOut();
+    }
+    var ui = new firebaseui.auth.AuthUI(firebase.auth()); 
+    
+</script>
+
+<script src="functions.js"></script>
+
+<div id="firebaseui-auth-container"></div>
+<script>ui.start('#firebaseui-auth-container', uiConfig);</script>
+
+<body>  
+    <h1>CS300IM</h1>
+    <ul id="chatoutput"></ul>
+    <form onsubmit="return sendMessage()">
+        <input id="user-message" placeholder="Enter message">
+        <input type="submit" placeholder="send message">
+</form>
+<button onclick="signout()">Sign-out</button>
+</body>

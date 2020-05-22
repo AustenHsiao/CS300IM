@@ -7,6 +7,14 @@ for anything web based, be it mobile or browser. It contains everything from dat
 authentication. Best of all, its lowest tier is free.
 
 This file will serve as a running account of events during the creation of CS300IM, an
-instant messaging application written for CS300 at PSU. This is a bit of a readme/diary
+instant messaging application written for CS300 at PSU. This is a bit of a readme/diary 
+End 05/13/2020
 ________________________________________________________________________________________
+
+Using firebase on top of an existing website requires the user to have total control over
+the domain. Since I'm not the owner of pdx.edu, I'm at a standstill trying to use the full 
+firebase functionality, so I've decided to make a local chat app. 
+Authentication added 05/20/2020
+Chat display added 05/22/2020
+End 05/22/2020
 

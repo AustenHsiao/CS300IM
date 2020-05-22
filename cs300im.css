@@ -1,0 +1,11 @@
+ul{
+    min-height: 300px;
+    max-height: 300px;
+    overflow: auto;
+    font-family: arial;
+    list-style: none;
+    border-color: black;
+    border-style: solid;
+    min-width: 500px;
+    max-width: 500px;
+}
