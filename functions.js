@@ -1,5 +1,26 @@
+var room = 'publicchat';
+
 function signout(){
   firebase.auth().signOut();
+}
+
+
+function changeroom(){
+  room = prompt("Enter new room name");
+  document.getElementById("chatoutput").innerHTML = '';
+  document.getElementById("roomname").innerHTML = room;
+  firebase.database().ref(room).on("child_added", (snapshot) => {
+    if(snapshot){
+      let chat = "";
+      chat += "<li>";
+      chat += snapshot.val().sender + ": " + snapshot.val().message;
+      chat += "</li>";
+  
+      document.getElementById("chatoutput").innerHTML += chat;
+      var box = document.getElementById('chatoutput');
+      box.scrollTop = box.scrollHeight;
+    }
+  });  
 }
 
 function sendMessage(){
@@ -15,7 +36,7 @@ function sendMessage(){
 
   // Send the 'user-message' field to the chat collection
   var message = document.getElementById("user-message").value;
-  firebase.database().ref("chat").push({
+  firebase.database().ref(room).push({
       "sender": username,
       "message": message
   });
@@ -42,7 +63,8 @@ var uiConfig = {
   ],
 };
 
-firebase.database().ref("chat").on("child_added", (snapshot) => {
+firebase.database().ref(room).on("child_added", (snapshot) => {
+  document.getElementById("roomname").innerHTML = room;
   if(snapshot){
     let chat = "";
     chat += "<li>";

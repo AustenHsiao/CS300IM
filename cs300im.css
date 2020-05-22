@@ -9,3 +9,7 @@ ul{
     min-width: 500px;
     max-width: 500px;
 }
+
+#roomname{
+    font-weight: normal;
+}

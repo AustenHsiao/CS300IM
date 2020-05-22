@@ -47,10 +47,12 @@
 
 <body>  
     <h1>CS300IM</h1>
+    <h3>You are currently in room: <div id='roomname'>publicchat</div></h3>
     <ul id="chatoutput"></ul>
     <form onsubmit="return sendMessage()">
         <input id="user-message" placeholder="Enter message">
         <input type="submit" placeholder="send message">
 </form>
 <button onclick="signout()">Sign-out</button>
+<button onclick="changeroom()">Change Room</button>
 </body>

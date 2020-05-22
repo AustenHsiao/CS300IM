@@ -15,9 +15,12 @@ Using firebase on top of an existing website requires the user to have total con
 the domain. Since I'm not the owner of pdx.edu, I'm at a standstill trying to use the full 
 firebase functionality, so I've decided to make a local chat app. 
 Authentication added 05/20/2020
-Chat display added 05/22/2020
+Chat display added 05/21/2020
 
 It's very barebones.
 chatapp.html may be removed, its existence is currently redundant
-End 05/22/2020
+End 05/21/2020
+________________________________________________________________________________________
 
+Added chatrooms 05/22/2020
+Deleted chatapp.html
