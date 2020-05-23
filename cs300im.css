@@ -8,8 +8,13 @@ ul{
     border-style: solid;
     min-width: 500px;
     max-width: 500px;
+    z-index: 0;
 }
 
 #roomname{
     font-weight: normal;
+}
+
+#firebaseui-auth-container{
+    z-index: 1;
 }
