@@ -1,4 +1,4 @@
-ul{
+#chatoutput{
     min-height: 300px;
     max-height: 300px;
     overflow: auto;
@@ -7,12 +7,30 @@ ul{
     border-color: black;
     border-style: solid;
     min-width: 500px;
-    max-width: 500px;
+    max-width: 500px; 
+}
+
+#layer0{
+    position: absolute;
+    left: 35vw;
+    top: 10vw;
     z-index: 0;
 }
 
 #roomname{
-    font-weight: normal;
+    font-weight: normal;    
+}
+#roomsopen:before{
+    content:attr(aria-label);
+    text-decoration: underline;
+}
+
+#roomsopen{
+    position: absolute;
+    left: 20vw;
+    top: 15vw;
+    z-index: 0;
+    list-style: none;
 }
 
 #firebaseui-auth-container{

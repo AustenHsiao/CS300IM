@@ -45,14 +45,20 @@
 <div id="firebaseui-auth-container"></div>
 <script>ui.start('#firebaseui-auth-container', uiConfig);</script>
 
-<body>  
-    <h1>CS300IM</h1>
-    <h3>You are currently in room: <div id='roomname'>publicchat</div></h3>
-    <ul id="chatoutput"></ul>
-    <form onsubmit="return sendMessage()">
-        <input id="user-message" placeholder="Enter message">
-        <input type="submit" placeholder="send message">
-</form>
-<button onclick="signout()">Sign-out</button>
-<button onclick="changeroom()">Change Room</button>
+<body> 
+    <div id="layer0"> 
+        <h1>CS300IM</h1>
+        <h3>You are currently in room: <div id='roomname'>publicchat</div></h3>
+        <ul id="chatoutput"></ul>
+        <form onsubmit="return sendMessage()" autocomplete="off">
+            <input id="user-message" placeholder="Enter message">
+            <input type="submit" placeholder="send message" value="Send Message">
+        </form>
+        <button onclick="signout()">Sign-out</button>
+        <button onclick="changeroom()">Create Room</button>
+        <button onclick="deleteroom()">Close Room</button>
+    </div>
+
+<ul id="roomsopen" aria-label="Created Chat Rooms:"></ul>
+
 </body>

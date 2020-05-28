@@ -1,17 +1,59 @@
-var room = 'publicchat';
+var room = 'publicchat'; // room is the current room the user is in
 
 function signout(){
+  // this function literally just signs out
   firebase.auth().signOut();
 }
 
+function gather_roomlist(){
+// will populate the list elements with rooms that the user is a part of
+  var user = firebase.auth().currentUser;
+  if(!user){
+    alert("Not signed in. Sign in to continue");
+    return false;
+  }
+  const location = firebase.database().ref();
+  location.once("value", (snapshot) => {
+    snapshot.forEach( collection => {
+      collection.forEach( chatloghash => {
+        chatloghash.forEach( chat => {
+          if(chat.key == "sender" && chat.node_.value_ === user.email){
+            var ul = document.getElementById("roomsopen");
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(collection.key));
+            ul.appendChild(li);
+          }
+        });
+      });      
+    });
+  });
+}
 
 function changeroom(){
+  // changeroom allows the user to change rooms
+  var user = firebase.auth().currentUser;
+  if(!user){
+    alert("Not signed in. Sign in to continue");
+    return false;
+  }
   room = prompt("Enter new room name");
   document.getElementById("chatoutput").innerHTML = '';
   document.getElementById("roomname").innerHTML = room;
+
+  firebase.database().ref(room).on("value", (snapshot) => {
+      if(!snapshot.exists()){
+        var ul = document.getElementById("roomsopen");
+        var li = document.createElement("li");
+        li.setAttribute('id',room);
+        li.appendChild(document.createTextNode(room));
+        ul.appendChild(li);
+      }
+  });
+  // when we change rooms successfully, update the chat box to show all msgs-- this is
+  // the chat log
   firebase.database().ref(room).on("child_added", (snapshot) => {
     if(snapshot){
-      let chat = "";
+      var chat = "";
       chat += "<li>";
       chat += snapshot.val().sender + ": " + snapshot.val().message;
       chat += "</li>";
@@ -24,6 +66,8 @@ function changeroom(){
 }
 
 function sendMessage(){
+  // sendMessage sends a message and populates the chat box for all users  
+  // in the room to see.
   // Before sending a message, ensure that the user is signed in
   var user = firebase.auth().currentUser;
   if(user){
@@ -45,12 +89,13 @@ function sendMessage(){
 }
 
 var uiConfig = {
+  // This variable handles sign in
   callbacks: {
     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
       // User successfully signed in.
       // Return type determines whether we continue the redirect automatically
       // or whether we leave that to developer to handle.
-      user = firebase.auth().currentUser;
+      gather_roomlist(); // we populate the roomlist once the user is signed in
       return false;
     },
   },
@@ -63,6 +108,29 @@ var uiConfig = {
   ],
 };
 
+function deleteroom(){
+  // deletes a room
+  var user = firebase.auth().currentUser;
+  if(!user){
+    alert("Not signed in. Sign in to continue");
+    return false;
+  }
+  room = prompt("Enter room name to delete. This will delete all chat logs for the room!");
+  if(room === 'publicchat'){
+    alert("Invalid name");
+    room = prompt("Enter room name to delete. This will delete all chat logs for the room!");
+  }
+  firebase.database().ref(room).on("value", (snapshot) => {
+    if(!snapshot.exists()){
+      firebase.database().ref(room).remove();
+      alert(`${room} deleted`);
+      return;
+    }
+    alert(`${room} not found`);
+});
+}
+
+//Below is what controls how messages are displayed
 firebase.database().ref(room).on("child_added", (snapshot) => {
   document.getElementById("roomname").innerHTML = room;
   if(snapshot){
@@ -76,4 +144,3 @@ firebase.database().ref(room).on("child_added", (snapshot) => {
     box.scrollTop = box.scrollHeight;
   }
 });
-
