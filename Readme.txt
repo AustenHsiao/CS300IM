@@ -28,4 +28,8 @@ End 05/22/2020
 ________________________________________________________________________________________
 
 Added unique chat room lists (unique to each user) 05/28/2020
+End 05/28/2020
+________________________________________________________________________________________
+
+Fixed but in generating the unique chat room lists-- would show multiples of the same room (6/1/2020)
 

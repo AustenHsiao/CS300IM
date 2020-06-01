@@ -12,19 +12,25 @@ function gather_roomlist(){
     alert("Not signed in. Sign in to continue");
     return false;
   }
+  var roomlist = new Set();
   const location = firebase.database().ref();
   location.once("value", (snapshot) => {
     snapshot.forEach( collection => {
       collection.forEach( chatloghash => {
         chatloghash.forEach( chat => {
           if(chat.key == "sender" && chat.node_.value_ === user.email){
-            var ul = document.getElementById("roomsopen");
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(collection.key));
-            ul.appendChild(li);
+            // Add to set otherwise we'll get duplicates
+            roomlist.add(collection.key);
           }
         });
       });      
+    });
+    var uniquerooms = Array.from(roomlist);
+    uniquerooms.forEach( room => {
+      var ul = document.getElementById("roomsopen");
+      var li = document.createElement("li");
+      li.appendChild(document.createTextNode(room));
+      ul.appendChild(li);
     });
   });
 }
