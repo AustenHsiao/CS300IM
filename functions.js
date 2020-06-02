@@ -90,6 +90,7 @@ function sendMessage(){
       "sender": username,
       "message": message
   });
+
   document.getElementById("user-message").value = '';
   return false;
 }
