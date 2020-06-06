@@ -1,17 +1,19 @@
 var room = 'publicchat'; // room is the current room the user is in
+var uniquerooms;
 
 function signout(){
   // this function literally just signs out
   firebase.auth().signOut();
 }
 
-function gather_roomlist(){
+function gather_roomlist(newroom = undefined){
 // will populate the list elements with rooms that the user is a part of
   var user = firebase.auth().currentUser;
   if(!user){
     alert("Not signed in. Sign in to continue");
     return false;
   }
+  document.getElementById("roomsopen").innerHTML = '';
   var roomlist = new Set();
   const location = firebase.database().ref();
   location.once("value", (snapshot) => {
@@ -25,7 +27,10 @@ function gather_roomlist(){
         });
       });      
     });
-    var uniquerooms = Array.from(roomlist);
+    if(newroom !== undefined){
+      roomlist.add(newroom);
+    }
+    uniquerooms = Array.from(roomlist);
     uniquerooms.forEach( room => {
       var ul = document.getElementById("roomsopen");
       var li = document.createElement("li");
@@ -43,18 +48,13 @@ function changeroom(){
     return false;
   }
   room = prompt("Enter new room name");
+  if(room === null){
+    return 4444;
+  }
+  gather_roomlist(room);
   document.getElementById("chatoutput").innerHTML = '';
   document.getElementById("roomname").innerHTML = room;
-
-  firebase.database().ref(room).on("value", (snapshot) => {
-      if(!snapshot.exists()){
-        var ul = document.getElementById("roomsopen");
-        var li = document.createElement("li");
-        li.setAttribute('id',room);
-        li.appendChild(document.createTextNode(room));
-        ul.appendChild(li);
-      }
-  });
+  
   // when we change rooms successfully, update the chat box to show all msgs-- this is
   // the chat log
   firebase.database().ref(room).on("child_added", (snapshot) => {
@@ -90,7 +90,6 @@ function sendMessage(){
       "sender": username,
       "message": message
   });
-
   document.getElementById("user-message").value = '';
   return false;
 }
@@ -125,16 +124,22 @@ function deleteroom(){
   room = prompt("Enter room name to delete. This will delete all chat logs for the room!");
   if(room === 'publicchat'){
     alert("Invalid name");
-    room = prompt("Enter room name to delete. This will delete all chat logs for the room!");
+    return;
   }
-  firebase.database().ref(room).on("value", (snapshot) => {
-    if(!snapshot.exists()){
+  var del = 0;
+  uniquerooms.forEach(i => {
+    if(i === room){
       firebase.database().ref(room).remove();
       alert(`${room} deleted`);
+      gather_roomlist();
+      del = 1;
       return;
     }
-    alert(`${room} not found`);
-});
+  });
+  if(del === 0){
+    alert(`${room} not found.`);
+  }
+  
 }
 
 //Below is what controls how messages are displayed

@@ -28,43 +28,16 @@ function gather_roomlist(useremail){
     return uniquerooms;
 }
 
-/*
-function changeroom(){
-  // changeroom allows the user to change rooms
-  var user = firebase.auth().currentUser;
-  if(!user){
-    alert("Not signed in. Sign in to continue");
-    return false;
-  }
-  room = prompt("Enter new room name");
-  document.getElementById("chatoutput").innerHTML = '';
-  document.getElementById("roomname").innerHTML = room;
-
-  firebase.database().ref(room).on("value", (snapshot) => {
-      if(!snapshot.exists()){
-        var ul = document.getElementById("roomsopen");
-        var li = document.createElement("li");
-        li.setAttribute('id',room);
-        li.appendChild(document.createTextNode(room));
-        ul.appendChild(li);
-      }
-  });
-  // when we change rooms successfully, update the chat box to show all msgs-- this is
-  // the chat log
-  firebase.database().ref(room).on("child_added", (snapshot) => {
-    if(snapshot){
-      var chat = "";
-      chat += "<li>";
-      chat += snapshot.val().sender + ": " + snapshot.val().message;
-      chat += "</li>";
-  
-      document.getElementById("chatoutput").innerHTML += chat;
-      var box = document.getElementById('chatoutput');
-      box.scrollTop = box.scrollHeight;
-    }
-  });  
+function changeroom(roomname, list_of_rooms){
+  var room = roomname;
+  list_of_rooms.forEach(_room =>{
+    if(_room === roomname){
+      return -1;
+    }});
+  return room;
 }
 
+/*
 function sendMessage(){
   // sendMessage sends a message and populates the chat box for all users  
   // in the room to see.

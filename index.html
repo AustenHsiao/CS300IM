@@ -50,8 +50,8 @@
         <h1>CS300IM</h1>
         <h3>You are currently in room: <div id='roomname'>publicchat</div></h3>
         <ul id="chatoutput"></ul>
-        <form onsubmit="return sendMessage()" autocomplete="off">
-            <input id="user-message" placeholder="Enter message">
+        <form onsubmit="return sendMessage()" autocomplete="off" >
+            <input id="user-message" placeholder="Enter message" maxlength=300>
             <input type="submit" placeholder="send message" value="Send Message">
         </form>
         <button onclick="signout()">Sign-out</button>
