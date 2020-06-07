@@ -28,98 +28,46 @@ function gather_roomlist(useremail){
     return uniquerooms;
 }
 
-function changeroom(roomname, list_of_rooms){
-  var room = roomname;
-  list_of_rooms.forEach(_room =>{
-    if(_room === roomname){
-      return -1;
-    }});
-  return room;
+function changeroom(useremail, changeTo){
+  var roomlistforUser = ['room1', 'room2', 'room3'];
+  // changeroom allows the user to change rooms
+  var user = useremail;
+  if(!user){
+    return 4; // If user is not logged in, they should not be allowed to join rooms
+  }
+  room = changeTo;
+  if(room === null){
+    return 4; // This signifies that the user canceled out of the alert prompt. End the function.
+  }
+  //gather_roomlist(room); repopulate the openroomlist but add in the new room
+  roomlistforUser.push(room);
+  return roomlistforUser; // Should now include the changeTo room
+}
+
+function deleteroom(useremail, toDelete){
+  var roomlistforUser = ['room1', 'room2', 'room3'];
+  // deletes a room
+  var user = useremail;
+  if(!user){
+    return 4;
+  }
+  room = toDelete;
+  if(room === 'publicchat' || !room){
+
+    return 4;
+  }
+  var new_roomlist = roomlistforUser.filter(rooms => {
+    if(rooms !== room){return true;}
+    return false;
+  });
+  return new_roomlist; 
 }
 
 /*
-function sendMessage(){
-  // sendMessage sends a message and populates the chat box for all users  
-  // in the room to see.
-  // Before sending a message, ensure that the user is signed in
-  var user = firebase.auth().currentUser;
-  if(user){
-    username = user.email;
-  }
-  else{
-    alert("Not signed in. Sign in to continue");
-    return false;
-  }
-
-  // Send the 'user-message' field to the chat collection
-  var message = document.getElementById("user-message").value;
-  firebase.database().ref(room).push({
-      "sender": username,
-      "message": message
-  });
-  firebase.assertSucceeds(app.database().ref(room).once("value"));
-  document.getElementById("user-message").value = '';
-  return false;
-}
-
-var uiConfig = {
-  // This variable handles sign in
-  callbacks: {
-    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-      // User successfully signed in.
-      // Return type determines whether we continue the redirect automatically
-      // or whether we leave that to developer to handle.
-      gather_roomlist(); // we populate the roomlist once the user is signed in
-      return false;
-    },
-  },
-  // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-  signInFlow: 'popup',
-  signInSuccessUrl: '',
-  signInOptions: [
-    // Leave the lines as is for the providers you want to offer your users.
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
-  ],
-};
-
-function deleteroom(){
-  // deletes a room
-  var user = firebase.auth().currentUser;
-  if(!user){
-    alert("Not signed in. Sign in to continue");
-    return false;
-  }
-  room = prompt("Enter room name to delete. This will delete all chat logs for the room!");
-  if(room === 'publicchat'){
-    alert("Invalid name");
-    room = prompt("Enter room name to delete. This will delete all chat logs for the room!");
-  }
-  firebase.database().ref(room).on("value", (snapshot) => {
-    if(!snapshot.exists()){
-      firebase.database().ref(room).remove();
-      alert(`${room} deleted`);
-      return;
-    }
-    alert(`${room} not found`);
-});
-}
-
-//Below is what controls how messages are displayed
-firebase.database().ref(room).on("child_added", (snapshot) => {
-  document.getElementById("roomname").innerHTML = room;
-  if(snapshot){
-    let chat = "";
-    chat += "<li>";
-    chat += snapshot.val().sender + ": " + snapshot.val().message;
-    chat += "</li>";
-
-    document.getElementById("chatoutput").innerHTML += chat;
-    var box = document.getElementById('chatoutput');
-    box.scrollTop = box.scrollHeight;
-  }
-});*/
-//console.log(gather_roomlist());
-
+  BELOW THIS BLOCK CONTAINS ALL OF THE TESTS FOR CS300IM. NOTE THAT THE FUNCTIONS USED IN THIS TEST FILE ARE SIMILAR NOT BUT EXACT TO THE FUNCTIONS USED BY THE
+  ACTUAL PROGRAM. 
+*/
+// gatherroomlist()
 it("generates list of the rooms user belongs to. No input: should return empty list.\n\tThe stand-in for the database is a hardcoded list because\n\tI couldnt configure the local firebase db.", function(){
   var ret = gather_roomlist();
   test.value(ret).is([]);
@@ -139,4 +87,40 @@ it("Tests gather_roomlist('user2@gmail.com'). First collection should be returne
 it("Tests gather_roomlist('user3@gmail.com'). First collection should be returned.", function(){
   var ret = gather_roomlist('user3@gmail.com');
   test.value(ret).is([[[{"message":"test","sender":"user1@gmail.com"}],[{"message":"test1","sender":"user2@gmail.com"}],[{"message":"test2","sender":"user3@gmail.com"}]]] );
+});
+
+// changeroom()
+it("Tests changeroom(). The user email and the room name they want to change to are passed in. If user email is not specified, this means they are not logged in and \n  \
+ and the function should terminate (return 4). If email is valid and room name is given, this function should add the room to their roomlist. For this test, every user has the roomlist: \
+ ['room1', 'room2', 'room3']:", function(){
+  var ret = changeroom('user3@gmail.com', 'testroom');
+  test.value(ret).is(['room1', 'room2', 'room3', 'testroom']);
+});
+it("Tests changeroom(). Invalid user should terminate and return 4:", function(){
+  var ret = changeroom(null, 'testroom');
+  test.value(ret).is(4);
+});
+it("Tests changeroom(). Likewise, an invalid room name should terminate and return 4:", function(){
+  var ret = changeroom('user3@gmail.com', null);
+  test.value(ret).is(4);
+});
+it("Tests deleteroom(). Invalid user should return 4:", function(){
+  var ret = deleteroom(null, 'testroom');
+  test.value(ret).is(4);
+});
+it("Tests deleteroom(). Specifying 'publicchat' should return 4:", function(){
+  var ret = deleteroom('user3@gmail.com', 'publicchat');
+  test.value(ret).is(4);
+});
+it("Tests deleteroom(). Specifying 'room3' should return ['room1', 'room2']:", function(){
+  var ret = deleteroom('user3@gmail.com', 'room3');
+  test.value(ret).is(['room1', 'room2']);
+});
+it("Tests deleteroom(). Specifying a room that doesnt exist should return the unchanged list:", function(){
+  var ret = deleteroom('user3@gmail.com', 'room5');
+  test.value(ret).is(['room1', 'room2', 'room3']);
+});
+it("Tests deleteroom(). Invalid room should return 4:", function(){
+  var ret = deleteroom('user3@gmail.com', null);
+  test.value(ret).is(4);
 });
