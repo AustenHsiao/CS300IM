@@ -35,6 +35,5 @@ Fixed bug in generating the unique chat room lists-- would show multiples of the
 End 06/01/2020
 ________________________________________________________________________________________
 
-Wrote some very simple (read: crappy) tests. Couldn't figure out how to set up local database 
-and the amount of text made me very sleepy.
+Added tests for more complete coverage
 Fin.
